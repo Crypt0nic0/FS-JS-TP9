@@ -37,5 +37,27 @@ inputRange.addEventListener('input', (e) => {
     rangeValue.textContent = e.target.value;
 })
 
+alpha.addEventListener('click', () => {
+    countries.sort((a,b) => {
+        let fa = a.translations.fra.common.toLowerCase();
+        let fb = b.translations.fra.common.toLowerCase();
+        if(fa < fb) return -1;
+        if(fa > fb) return 1;
+        return 0;
+    });
+    displayCountries();
+})
 
-// 7 - Gérer les 3 boutons pour trier (méthode sort()) les pays
+minToMax.addEventListener('click', () => {
+    countries.sort((a,b) => {
+        return a.population - b.population;
+    })
+    displayCountries();
+})
+
+maxToMin.addEventListener('click', () => {
+    countries.sort((a,b) => {
+        return b.population - a.population;
+    })
+    displayCountries();
+})
