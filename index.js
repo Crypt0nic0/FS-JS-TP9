@@ -1,47 +1,41 @@
 let countries = [];
-const countryContainer = document.querySelector(".countries-container");
+const countriesContainer = document.querySelector('.countries-container');
 
-async function fetchCountries() {
+fetchCountries = async () => {
     await fetch('https://restcountries.com/v3.1/all')
-    .then((res) => res.json())
-    .then((data) => (countries = data));
+        .then((res) => res.json())
+        .then((data) => countries = data);
 
-    countriesDisplay("", rangeValue.textContent);
+    displayCountries();
 }
 
-function countriesDisplay(search, nbAff){
-    countryContainer.innerHTML = countries
-    .map((country) => {
-        const countryNameUp = country.name.common.toUpperCase();
-        if(countryNameUp.includes(search))
-        {
+displayCountries = () => {
+    countriesContainer.innerHTML = countries
+        .filter((country) => country.translations.fra.common.toUpperCase().includes(inputSearch.value.toUpperCase()))
+        .map((country) => {
             return `
-                <img src=${country.flags.png} alt=${country.flags.alt}>
-                <h2>${country.name.common}</h2>
-                <h3>${country.capital}</h3>
-                <p>${country.population}</p>
+                <div class="card">
+                    <img src=${country.flags.png} alt=${country.flags.alt}>
+                    <h2>${country.translations.fra.common}</h2>
+                    <h3>${country.capital}</h3>
+                    <p>Population : ${country.population.toLocaleString()}</p>
+                </div>
             `
-        }
-    })
-    .join("");
+        })
+        .slice(0, inputRange.value)
+        .join('');
 }
 
 fetchCountries();
 
+inputSearch.addEventListener('keyup', () => {
+    displayCountries();
+})
 
-
-inputSearch.addEventListener("keyup", (e) => {
-    countriesDisplay(e.target.value.toUpperCase(), rangeValue.textContent);
-});
-
-inputRange.addEventListener("input", (e) => {
+inputRange.addEventListener('input', (e) => {
+    displayCountries();
     rangeValue.textContent = e.target.value;
-    countriesDisplay(inputSearch.value.toUpperCase(), rangeValue.textContent);
-});
+})
 
-// 4 - Créer une fonction d'affichage, 
-//et paramétrer l'affichage des cartes de chaque pays grace à la méthode MAP
-
-// 6 - Avec la méthode Slice gérer le nombre de pays affichés (inputRange.value)
 
 // 7 - Gérer les 3 boutons pour trier (méthode sort()) les pays
